@@ -3,6 +3,8 @@
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use app\Models\Event;
+use app\Models\User;
 
 Route::get('/', function () {
     return view('home');
@@ -27,6 +29,18 @@ Route::get('/admin', function () {
     if (!Auth::check() || auth()->user()->role != 'admin') {
         return redirect('/');
     }
-
-    return "Admin Panel 🔥";
+    return view('admin', [
+        'users' => User::all(),
+        'events' => Event::all(),
+    ]);
 });
+
+Route::get('/profil', function () {
+    return view('profil');
+})->name('profil');
+
+
+Route::get('/admin', function () {
+    return view('admin');
+});
+ 
