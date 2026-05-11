@@ -4,15 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Profile - Evenova</title>
+<title>Add Event - Evenova</title>
 
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
 
 <style>
 
-/* =========================
+/* =========================================
    RESET
-========================= */
+========================================= */
 
 *{
     margin:0;
@@ -33,9 +33,9 @@ body{
     min-height:100vh;
 }
 
-/* =========================
+/* =========================================
    NAVBAR
-========================= */
+========================================= */
 
 .ev-nav{
     display:flex;
@@ -63,31 +63,29 @@ body{
     text-decoration:none;
 }
 
-/* =========================
+/* =========================================
    PAGE
-========================= */
+========================================= */
 
-.profile-wrapper{
+.ev-add-wrapper{
     display:flex;
     justify-content:center;
     align-items:center;
 
-    padding:60px 20px;
+    padding:70px 20px;
 }
 
-/* =========================
-   CARD
-========================= */
+/* CARD */
 
-.profile-card{
+.ev-add-card{
     width:100%;
-    max-width:650px;
+    max-width:760px;
 
     background:white;
 
-    border-radius:30px;
+    border-radius:34px;
 
-    padding:50px;
+    padding:60px;
 
     box-shadow:
     0 25px 70px rgba(120,0,0,.08);
@@ -110,45 +108,29 @@ body{
 
 /* TITLE */
 
-.profile-title{
+.ev-add-title{
     font-family:'DM Serif Display',serif;
 
-    font-size:52px;
+    font-size:58px;
 
-    color:#1a0000;
-
-    margin-bottom:12px;
+    margin-bottom:14px;
 }
 
-.profile-sub{
+.ev-add-sub{
     color:#777;
 
-    margin-bottom:36px;
+    line-height:1.8;
 
-    line-height:1.7;
-}
-
-/* SUCCESS */
-
-.success-box{
-    background:#e7ffe7;
-
-    color:green;
-
-    padding:14px 18px;
-
-    border-radius:14px;
-
-    margin-bottom:24px;
+    margin-bottom:40px;
 }
 
 /* INPUT */
 
-.input-group{
-    margin-bottom:22px;
+.ev-input-group{
+    margin-bottom:24px;
 }
 
-.input-group label{
+.ev-input-group label{
     display:block;
 
     margin-bottom:10px;
@@ -159,12 +141,12 @@ body{
     color:#444;
 }
 
-.input-group input{
+.ev-input-group input{
     width:100%;
 
     padding:18px 20px;
 
-    border-radius:16px;
+    border-radius:18px;
 
     border:1px solid rgba(120,0,0,.08);
 
@@ -177,7 +159,7 @@ body{
     transition:.3s;
 }
 
-.input-group input:focus{
+.ev-input-group input:focus{
     border-color:#780000;
 
     background:white;
@@ -188,14 +170,10 @@ body{
 
 /* BUTTON */
 
-.update-btn{
+.ev-submit-btn{
     width:100%;
 
     border:none;
-
-    padding:18px;
-
-    border-radius:18px;
 
     background:
     linear-gradient(
@@ -206,24 +184,26 @@ body{
 
     color:white;
 
+    padding:18px;
+
+    border-radius:18px;
+
     font-size:15px;
     font-weight:600;
 
     cursor:pointer;
 
-    transition:.3s;
-
-    margin-top:10px;
+    transition:.35s;
 
     box-shadow:
-    0 15px 35px rgba(120,0,0,.16);
+    0 18px 40px rgba(120,0,0,.14);
 }
 
-.update-btn:hover{
+.ev-submit-btn:hover{
     transform:translateY(-3px);
 
     box-shadow:
-    0 22px 45px rgba(120,0,0,.24);
+    0 24px 60px rgba(120,0,0,.22);
 }
 
 /* RESPONSIVE */
@@ -234,12 +214,12 @@ body{
         padding:20px 24px;
     }
 
-    .profile-card{
-        padding:34px 24px;
+    .ev-add-card{
+        padding:40px 24px;
     }
 
-    .profile-title{
-        font-size:40px;
+    .ev-add-title{
+        font-size:42px;
     }
 }
 
@@ -258,84 +238,96 @@ body{
 
 </nav>
 
-<!-- PROFILE -->
+<!-- PAGE -->
 
-<div class="profile-wrapper">
+<div class="ev-add-wrapper">
 
-    <div class="profile-card">
+    <div class="ev-add-card">
 
-        <h1 class="profile-title">
-            Your profile
+        <h1 class="ev-add-title">
+            Add event
         </h1>
 
-        <p class="profile-sub">
-            Manage your account information and update your profile.
+        <p class="ev-add-sub">
+            Create your own event and share it with the community.
         </p>
 
-        @if(session('success'))
-
-            <div class="success-box">
-                {{ session('success') }}
-            </div>
-
-        @endif
-
-        <form method="POST" action="{{ route('profile.update') }}">
+        <form method="POST"
+              action="{{ route('event.store') }}">
 
             @csrf
 
-            <!-- NAME -->
+            <!-- TITLE -->
 
-            <div class="input-group">
+            <div class="ev-input-group">
 
                 <label>
-                    Full name
+                    Event title
                 </label>
 
                 <input
                     type="text"
-                    name="name"
-                    value="{{ auth()->user()->name }}"
+                    name="title"
+                    placeholder="Tech Meetup"
                     required
                 >
 
             </div>
 
-            <!-- EMAIL -->
+            <!-- DATE START -->
 
-            <div class="input-group">
+            <div class="ev-input-group">
 
                 <label>
-                    Email address
+                    Start date
                 </label>
 
                 <input
-                    type="email"
-                    name="email"
-                    value="{{ auth()->user()->email }}"
+                    type="date"
+                    name="date_start"
                     required
                 >
 
             </div>
 
-            <!-- PASSWORD -->
+            <!-- DATE END -->
 
-            <div class="input-group">
+            <div class="ev-input-group">
 
                 <label>
-                    New password
+                    End date
                 </label>
 
                 <input
-                    type="password"
-                    name="password"
-                    placeholder="Leave empty if you don't want to change"
+                    type="date"
+                    name="date_end"
+                    required
                 >
 
             </div>
 
-            <button type="submit" class="update-btn">
-                Update profile
+            <!-- LOCATION -->
+
+            <div class="ev-input-group">
+
+                <label>
+                    Location
+                </label>
+
+                <input
+                    type="text"
+                    name="location"
+                    placeholder="Casablanca"
+                    required
+                >
+
+            </div>
+
+            <button type="submit"
+                    class="ev-submit-btn">
+
+                Create Event
+
             </button>
 
         </form>

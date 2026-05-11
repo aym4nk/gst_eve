@@ -4,65 +4,122 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+
+use App\Models\User;
 
 class AuthController extends Controller
 {
-    //  REGISTER
+    /* =========================================
+       REGISTER
+    ========================================= */
+
     public function register(Request $request)
     {
         $request->validate([
+
             'name' => 'required',
+
             'email' => 'required|email|unique:users',
+
             'password' => 'required|min:6'
+
         ]);
 
+        // CREATE USER
+
         $user = User::create([
+
             'name' => $request->name,
+
             'email' => $request->email,
-            'password' => Hash::make($request->password),
+
+            'password' => Hash::make(
+                $request->password
+            ),
+
+            // DEFAULT ROLE
+
             'role' => 'participant'
+
         ]);
+
+        // LOGIN USER
 
         Auth::login($user);
 
-        return redirect()->route('home'); 
+        return redirect()
+            ->route('home');
     }
 
-    //  LOGIN
+    /* =========================================
+       LOGIN
+    ========================================= */
+
     public function login(Request $request)
     {
-        $credentials = $request->only('email', 'password');
+        $request->validate([
+
+            'email' => 'required|email',
+
+            'password' => 'required'
+
+        ]);
+
+        $credentials = $request->only(
+            'email',
+            'password'
+        );
+
+        // LOGIN
 
         if (Auth::attempt($credentials)) {
 
-            $request->session()->regenerate(); 
+            $request->session()->regenerate();
 
             $user = Auth::user();
 
-            //  ADMIN
+            /* =========================
+               ADMIN
+            ========================= */
+
             if ($user->role === 'admin') {
-                return redirect('/admin');
+
+                return redirect()
+                    ->route('admin');
+
             }
 
-            // USER NORMAL
-            return redirect()->route('home'); 
+            /* =========================
+               NORMAL USER
+            ========================= */
+
+            return redirect()
+                ->route('home');
         }
 
+        // ERROR
+
         return back()->withErrors([
+
             'email' => 'Invalid credentials'
+
         ])->onlyInput('email');
     }
 
-    //  LOGOUT
+    /* =========================================
+       LOGOUT
+    ========================================= */
+
     public function logout(Request $request)
     {
         Auth::logout();
 
-        $request->session()->invalidate(); 
-        $request->session()->regenerateToken(); 
+        $request->session()->invalidate();
 
-        return redirect()->route('login');
+        $request->session()->regenerateToken();
+
+        return redirect()
+            ->route('login');
     }
-}   
+}
